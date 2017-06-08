@@ -1,5 +1,5 @@
 import bayeslite
-from iventure.bql_utils import cursor_to_df
+from iventure.utils_bql import cursor_to_df
 
 import copy
 import csv
