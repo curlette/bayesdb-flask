@@ -1,4 +1,4 @@
-from flask import Flask, request, session, url_for, redirect
+from flask import Flask, request, session, url_for, redirect, send_from_directory
 import glob
 import os
 from werkzeug.utils import secure_filename
@@ -14,9 +14,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # only allow csvs
 ALLOWED_EXTENSIONS = set(['csv'])
-
-# store column names globally, makes it easier to pass them into BayesDB
-col_names = []
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -35,9 +32,6 @@ def setup():
                 os.remove(f)
             file = request.files['file']
             if file and allowed_file(file.filename):
-                global col_names
-                # column names are in the first row
-                col_names = request.get_array()[0]
                 filename = secure_filename(file.filename)
                 session['filename'] = filename
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
@@ -74,9 +68,8 @@ def setup():
 
 @app.route("/analyze", methods=['POST','GET'])
 def analyze():
-    global col_names
     # the following call creates a new csv with pred. probs. added
-    compute_pred_prob(session['filename'], col_names, session['bdb'])
+    compute_pred_prob(session['filename'], session['bdb'])
     return redirect(url_for('setup'))
 
 @app.route("/export", methods=['POST','GET'])
