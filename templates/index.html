@@ -5,7 +5,7 @@
 <body>
     <title><center>Upload an excel file</title>
     <h1><center><br>Anomaly detection with BayesDB</h1>
-    <div style="margin: auto; width: 1333px; padding:25px">
+    <div style="margin: auto; width: 1333px; height: 150px; padding:25px">
         <div style="float:left; width:300px; padding:25px">
             <form action="" method=post>
                 <label>Set bdb file name:</label><br>
@@ -40,20 +40,20 @@
         </div>
     </div>
     <br><br>
-    <div style="clear:left; margin: auto; width: 400px; vertical-align: middle; text-align: center;">
-        <div style="display: inline-block; vertical-align: middle;">
-            <form action="" method=post enctype=multipart/form-data><center><p>
+    <div style="clear:left; margin: auto; width: 400px;">
+        <div style="display: inline-block; vertical-align: middle; height:120px;">
+            <form action="" method=post enctype=multipart/form-data><p>
                 <label>Select a csv to upload:</label><br>
                 <input type=file name=file><input type=submit value=Upload>
-                <p>{{ upload_msg }}</p><br>
+                <p>{{ upload_msg }}</p>
             </form>
         </div>
-        <div style="display: inline-block; vertical-align: middle;">
+        <div style="vertical-align: middle; text-align: center; padding-bottom: 20px">
             <form action="/analyze" method=post>
                  <input type=submit value="Analyze data">
-            </form><br>
+            </form>
         </div>
-        <div style="display: inline-block; vertical-align: middle;">
+        <div style="vertical-align: middle; text-align: center">
             <form action="/export" method=post>
                  <input type=submit value="Export result">
             </form>
