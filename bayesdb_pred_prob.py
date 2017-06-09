@@ -5,7 +5,7 @@ import copy
 import csv
 import os
 
-def compute_pred_prob(filename, bdb_name, col_names, table="satellites_t", population="satellites_p", columm="Apogee_km", start_row=1):
+def compute_pred_prob(filename, bdb_name, population, table, column, start_row=1):
 	# obtain a pointer to the bdb file
 	bdb = bayeslite.bayesdb_open('./%s' %(bdb_name))
 	with bdb.savepoint():
