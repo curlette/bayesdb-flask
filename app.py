@@ -7,7 +7,7 @@ from bayesdb_pred_prob import compute_pred_prob
 
 app=Flask(__name__)
 
-app.debug =True
+app.debug = True
 
 app.secret_key = "P\x11]\xe5\xb6\xf6r=\xc8a\x11O\xcf\x12\xa2W4\x9d\xbfm&\xef6#"
 
