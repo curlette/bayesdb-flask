@@ -1,4 +1,4 @@
-from flask import Flask, request, session, url_for, redirect, send_from_directory
+from flask import Flask, request, session, url_for, redirect, send_from_directory, render_template
 import glob
 import os
 from werkzeug.utils import secure_filename
@@ -41,74 +41,16 @@ def setup():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('setup'))
     else:
-        keys = ['filename', 'bdb', 'population', 'table', 'column']
+        keys = ['bdb', 'population', 'table', 'column', 'filename']
         for key in keys:
             if key not in session.keys():
                 session[key] = ''
-        return '''
-            <!doctype html>
-            <head>
-                <link href="./static/bootstrap.min.css" rel="stylesheet">
-            </head>
-            <body>
-                <title><center>Upload an excel file</title>
-                <h1><center><br>Anomaly detection with BayesDB</h1>
-                <div style="margin: auto; width: 1333px; padding:25px">
-                    <div style="float:left; width:300px; padding:25px">
-                        <form action="" method=post>
-                            <label>Set bdb file name:</label><br>
-                            <input type="text" name="bdb">
-                            <input type="submit" name="bdb" value="Set">
-                            <p>%s</p><br>
-                        </form>
-                    </div>
-                    <div style="float:left; width:300px; padding:25px">
-                        <form action="" method=post>
-                            <label>Set population name:</label><br>
-                            <input type="text" name="population">
-                            <input type="submit" name="population" value="Set">
-                            <p>%s</p><br>
-                        </form>
-                    </div>
-                    <div style="float:left; width:300px; padding:25px" >
-                        <form action="" method=post>
-                            <label>Set table name:</label><br>
-                            <input type="text" name="table">
-                            <input type="submit" name="table" value="Set">
-                            <p>%s</p><br>
-                        </form>
-                    </div>
-                    <div style="float:left; width:300px; padding:25px" >
-                        <form action="" method=post>
-                            <label>Set column name:</label><br>
-                            <input type="text" name="column">
-                            <input type="submit" name="column" value="Set">
-                            <p>%s</p><br>
-                        </form>
-                    </div>
-                </div>
-                <br><br>
-                <div style="clear:left; margin: auto; width: 400px; table-cell; vertical-align: middle; text-align: center;">
-                    <div style="display: inline-block; vertical-align: middle;">
-                        <form action="" method=post enctype=multipart/form-data><center><p>
-                            <label>Select a csv to upload:</label><br>
-                            <input type=file name=file><input type=submit value=Upload>
-                            <p>%s</p><br>
-                        </form>
-                    </div>
-                    <div style="display: inline-block; vertical-align: middle;">
-                        <form action="/analyze" method=post>
-                             <input type=submit value="Analyze data">
-                        </form><br>
-                    </div style="display: inline-block; vertical-align: middle;">
-                    <div style="margin: auto; width: 400px;">
-                        <form action="/export" method=post>
-                             <input type=submit value="Export result">
-                        </form>
-                    </div>
-                </div>
-            </body>
-            ''' % ("bdb set to " + session['bdb'] if session['bdb'] != '' else '', "Population set to " + session['population'] if session['population'] != '' else '', "Table set to " + session['table'] if session['table'] != '' else '', "Column set to " + session['column'] if session['column'] != '' else '', "Uploaded " + session['filename'] if session['filename'] != '' else '')
+        bdb_msg = 'bdb set to %s' %(session['bdb']) if session['bdb'] != '' else ''
+        population_msg = 'Population set to %s' %(session['population']) if session['population'] != '' else ''
+        table_msg = 'Table set to %s' %(session['table']) if session['table'] != '' else ''
+        column_msg = 'Column set to %s' %(session['column']) if session['column'] != '' else ''
+        upload_msg = 'Uploaded %s' %(session['filename']) if session['filename'] != '' else ''
+        return render_template('index.html', bdb_msg=bdb_msg, population_msg=population_msg, table_msg=table_msg, column_msg=column_msg, upload_msg=upload_msg)
 
 @app.route("/analyze", methods=['POST','GET'])
 def analyze():
