@@ -32,7 +32,7 @@ def compute_pred_prob(filename, bdb_name, population, table, column, start_row=1
 		bdb.sql_execute(insert_data_query)
 
 		# compute predictive probabilities
-		pred_prob_query = "ESTIMATE PREDICTIVE PROBABILITY OF %s AS pred_prob FROM %s WHERE %s._rowid_ >= %s" %(column, population, table, str(int(num_rows) + start_row))
+		pred_prob_query = "ESTIMATE PREDICTIVE PROBABILITY OF %s GIVEN (*) AS pred_prob FROM %s WHERE %s._rowid_ >= %s" %(column, population, table, str(int(num_rows) + start_row))
 		pred_prob_cursor = bdb.execute(pred_prob_query)
 		pred_prob_df = cursor_to_df(pred_prob_cursor)
 		pred_prob_list = pred_prob_df.loc[:, "pred_prob"].tolist()
